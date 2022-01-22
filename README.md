@@ -55,3 +55,6 @@ Assignment directory should look like this:
 
 
 ![test-jar-cmd](https://github.com/punitarani/java-tester/blob/main/img/TerminalTest.png?raw=true)
+
+
+The results from each test will be saved as result*.txt files in the assignment directory.
