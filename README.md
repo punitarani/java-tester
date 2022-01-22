@@ -55,7 +55,3 @@ Assignment directory should look like this:
 
 
 ![test-jar-cmd](https://github.com/punitarani/java-tester/blob/main/img/TerminalTest.png?raw=true)
-
-
-### Debugging Example
-![debugging-example](https://github.com/punitarani/java-tester/blob/main/img/DebugEx.png?raw=true)
