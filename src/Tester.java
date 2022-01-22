@@ -314,11 +314,18 @@ public class Tester {
 
                 // Find differences
                 for (int i = 0; i < expected_chars.length; i++){
-                    if (expected_chars[i] != actual_chars[i]){
-                        error.append("^");
+                    try
+                    {
+                        if (expected_chars[i] != actual_chars[i]){
+                            error.append("^");
+                        }
+                        else {
+                            error.append(" ");
+                        }
                     }
-                    else {
-                        error.append(" ");
+
+                    catch (ArrayIndexOutOfBoundsException e){
+                        error.append("^");
                     }
                 }
 
