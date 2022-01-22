@@ -3,7 +3,7 @@
 
 Run Java tests from the command line.
 
-Compare the output of the test with the expected output.
+Compare the test results with the expected outputs.
 
 ## Usage
 
@@ -57,3 +57,5 @@ Assignment directory should look like this:
 ![test-jar-cmd](https://github.com/punitarani/java-tester/blob/main/img/TerminalTest.png?raw=true)
 
 
+### Debugging Example
+![debugging-example](https://github.com/punitarani/java-tester/blob/main/img/DebugEx.png?raw=true)
