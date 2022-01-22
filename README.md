@@ -1,37 +1,23 @@
 # Java-Tester
-## Java Testing Tool
+### Java Testing and Debugging Tool
 
-Run Java tests from the command line.
-
-Compare the test results with the expected outputs.
-
-## Usage
-
-Download **test.jar** and paste it into a folder containing the assignment files to test.
-
-Make sure the folder contains the following files:
-* Assignment*.java
-* input*.txt
-* output*.txt
-* test.jar
-
-
-### Run Tests
-
-Run the following commands in the terminal:
-
-Change Directory to the folder containing the assignment files:
-
-    C:\Users\user> cd </assignmnet-directory>
-
-
-Run the test.jar file:
-
-    C:\Users\user\Assigments\1> java -jar test.jar
-
+## Features:
+- Compile and run tests automatically with one command.
+- Automatically finds input and output files.
+- Line-by-line error highlighting.
 
 ## Tutorial
-1. Download the **test.jar**
+### 1. Download the **test.jar**
+
+**Download Link:** https://github.com/punitarani/java-tester/raw/main/test.jar
+
+**Note:** The test.jar file might be blocked from downloading by your browser.
+
+You can **click on the three dots** and select **Keep** to download the file.
+
+![test-jar-cmd](https://github.com/punitarani/java-tester/blob/main/img/DownloadTestJar.png?raw=true)
+
+
 
 Assignment directory should look like this:
 
@@ -43,12 +29,19 @@ Assignment directory should look like this:
     ├── output2.txt
     └── test.jar
 
-2. Open **Terminal** and change directory to the assignment directory.
+
+
+### 2. Open **Terminal** and change directory to the assignment directory.
 (Can also be done by opening terminal from the assignment directory)
+
+
+    C:\Users\user> cd </assignmnet-directory>
 
 ![assignment-dir-cmd](https://github.com/punitarani/java-tester/blob/main/img/AssignmentDir.png?raw=true)
 
-3. Run the test.jar file:
+
+
+### 3. Run the test.jar file:
 
 
     java -jar test.jar
@@ -58,3 +51,11 @@ Assignment directory should look like this:
 
 
 The results from each test will be saved as result*.txt files in the assignment directory.
+
+
+
+- The test results will be displayed in the terminal.
+
+- If there are any failed tests, you will be prompted if you want to debug them.
+
+- It will find the line number of the error and highlights the errors.
