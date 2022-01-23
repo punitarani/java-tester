@@ -104,6 +104,22 @@ public class Assignment {
     }
 
     /**
+     * Set Input Files
+     * @param inputFiles Input Files
+     */
+    public void setInputFiles(File[] inputFiles){
+        this.inputFiles = inputFiles;
+    }
+
+    /**
+     * Set Output Files
+     * @param outputFiles Output Files
+     */
+    public void setOutputFiles(File[] outputFiles){
+        this.outputFiles = outputFiles;
+    }
+
+    /**
      * Set Result*.txt Files
      *
      * @param resultFiles Result*.txt Files
@@ -199,13 +215,13 @@ public class Assignment {
         int input_num;
         int output_num;
 
-        for (int i = 1; i < this.inputFiles.length+1; i++) {
-            input_num = Integer.parseInt(this.inputFiles[i-1].getName().substring(5, 6));
+        for (int i = 1; i < getInputFiles().length+1; i++) {
+            input_num = Integer.parseInt(getInputFiles()[i-1].getName().substring(5, 6));
 
             boolean found = false;
 
-            for (int j = 1; j < this.outputFiles.length+1; j++) {
-                output_num = Integer.parseInt(this.outputFiles[j-1].getName().substring(6, 7));
+            for (int j = 1; j < getOutputFiles().length+1; j++) {
+                output_num = Integer.parseInt(getOutputFiles()[j-1].getName().substring(6, 7));
                 if (input_num == output_num) {
                     tests.add(input_num);
                     found = true;
@@ -352,12 +368,40 @@ public class Assignment {
 
         // Get all input*.txt files
         for (File file : this.getFiles()) {
-            if (file.getName().contains("input") && file.getName().contains(".txt")) {
-                input_files.add(file);
-            }
+            // Split file name
+            String[] file_name = file.getName().split("\\.");
 
-            else if (file.getName().contains("output") && file.getName().contains(".txt")) {
-                output_files.add(file);
+            // Check extension to be .txt
+            if (file_name[1].equals("txt")) {
+                // Check if file name contains "input"
+                if (file_name[0].startsWith("input")) {
+                    // Check if other characters after input are numbers
+                    try
+                    {
+                        Integer.parseInt(file_name[0].substring(5));
+                        input_files.add(file);
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        // Do nothing
+                    }
+
+
+                }
+
+                // Check if file name contains "output"
+                else if (file_name[0].startsWith("output")) {
+                    //Check if other characters after output are numbers
+                    try
+                    {
+                        Integer.parseInt(file_name[0].substring(6));
+                        output_files.add(file);
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        // Do nothing
+                    }
+                }
             }
         }
 
@@ -369,8 +413,8 @@ public class Assignment {
         output_files_array = output_files.toArray(output_files_array);
 
         // Set input and output files
-        this.inputFiles = input_files_array;
-        this.outputFiles = output_files_array;
+        setInputFiles(input_files_array);
+        setOutputFiles(output_files_array);
     }
 
 
