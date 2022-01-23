@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-
 public class Assignment {
 
     private int number;
@@ -24,11 +23,16 @@ public class Assignment {
 
     private String OS;
 
-    final String win_base_command = "cmd /c ";
-    final String mac_base_command = "bash -c ";
-    final String nix_base_command = "bash -c ";
+    final String win_base_command = "cmd.exe";
+    final String mac_base_command = "/bin/bash";
+    final String nix_base_command = "/bin/bash";
 
-    String base_command = win_base_command;
+    final String win_string_command = "/c";
+    final String mac_string_command = "-c";
+    final String nix_string_command = "-c";
+
+    private String base_command;
+    private String string_command;
 
 
     /**
@@ -37,6 +41,8 @@ public class Assignment {
      * @param path Assignment folder path
      */
     public Assignment(String path){
+        setOSCommands();
+
         // Set assignment directory
         setAssignmentDir(new File(path));
 
@@ -52,7 +58,6 @@ public class Assignment {
         setResultFiles(getResultFiles());
         setTests(getTests());
 
-        setBaseCommand();
 
         setTester(createTester());
     }
@@ -184,17 +189,36 @@ public class Assignment {
     }
 
     /**
-     * Set base command for system based on OS
-     * Overloaded method
+     * Set base command 2 for system
+     * @param string_command base command 2 for system
      */
-    public void setBaseCommand(){
+    public void setStringCommand(String string_command){
+        this.string_command = string_command;
+    }
+
+    /**
+     * Set base and string command for system based on OS
+     */
+    public void setOSCommands(){
         String os = getOS();
 
         switch (os) {
-            case "mac" -> setBaseCommand(mac_base_command);
-            case "nix" -> setBaseCommand(nix_base_command);
-            default -> setBaseCommand(win_base_command);
+            case "mac" -> {
+                setBaseCommand(mac_base_command);
+                setStringCommand(mac_string_command);
+            }
+            case "nix" -> {
+                setBaseCommand(nix_base_command);
+                setStringCommand(nix_string_command);
+            }
+            case "win" -> {
+                setBaseCommand(win_base_command);
+                setStringCommand(win_string_command);
+            }
         }
+
+        System.out.println("base: " + base_command);
+        System.out.println("string: " + string_command);
     }
 
 
@@ -525,9 +549,10 @@ public class Assignment {
                 outputFiles,
                 resultFiles,
                 tests,
-                base_command
+                new String[] {base_command, string_command}
         );
     }
+
 
 
 
@@ -535,17 +560,22 @@ public class Assignment {
      * Compile Assignment*.java file
      */
     private void compile() throws IOException, InterruptedException {
-        // Create Runtime object
-        Runtime rt = Runtime.getRuntime();
+        // Create ProcessBuilder object
+        ProcessBuilder pb = new ProcessBuilder();
 
-        // Run command
-        String command = base_command;
-        command += "cd \"" + getAssignmentDir().getPath();
-        command += " \"&& javac \"" + getAssignmentFile().getAbsolutePath() + "\"";
-        Process p = rt.exec(command);
+        // cd to assignment directory
+        pb.directory(getAssignmentDir());
+
+        // Build compile command
+        String sub_command = "javac \"" + getAssignmentFile().getName() + "\"";
+
+        // Add command to process builder
+        System.out.println("Compile command: " + sub_command);
+        Process p = pb.command(base_command, string_command, sub_command).start();
 
         // Wait for process to finish
         p.waitFor();
+        System.out.println("Compile finished with code: " + p.exitValue());
     }
 
 

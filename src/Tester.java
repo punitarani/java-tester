@@ -16,7 +16,8 @@ public class Tester {
     private ArrayList<Integer> results;
     private ArrayList<Integer> failedTests;
 
-    private String os_command;
+    private String base_command;
+    private String string_command;
 
     
     /**
@@ -30,12 +31,13 @@ public class Tester {
                   File[] outputs,
                   File[] results,
                   int[] tests,
-                  String os_command){
+                  String[] os_commands){
         setInputFiles(inputs);
         setOutputFiles(outputs);
         setResultFiles(results);
         setTests(tests);
-        setOSCommand(os_command);
+        setBaseCommand(os_commands[0]);
+        setStringCommand(os_commands[1]);
     }
 
 
@@ -109,8 +111,12 @@ public class Tester {
      * Get the os_command based on OS
      * @return OS base command based on OS
      */
-    public String getOSCommand(){
-        return this.os_command;
+    public String getBaseCommand(){
+        return this.base_command;
+    }
+
+    public String getStringCommand(){
+        return this.string_command;
     }
 
 
@@ -182,8 +188,12 @@ public class Tester {
     /**
      * Set OSCommand based on OS
      */
-    public void setOSCommand(String os_command){
-        this.os_command = os_command;
+    public void setBaseCommand(String os_command){
+        this.base_command = os_command;
+    }
+
+    public void setStringCommand(String os_command2){
+        this.string_command = os_command2;
     }
 
 
@@ -236,21 +246,42 @@ public class Tester {
         String outputFile = "output" + test + ".txt";
         String resultFile = "result" + test + ".txt";
 
-        // Create command string to run
-        String command = os_command;
-        command += "cd \"" + this.getAssignmentDir().getAbsolutePath() + "\"";
-        command += " && java " + getAssignmentFile().getName().replace(".java", "")
-                + " < " + inputFile + " > " + resultFile;
+//        // Create Runtime object
+//        Runtime rt = Runtime.getRuntime();
+//
+//        // Create command string to run
+//        String sub_command = "java " + getAssignmentFile().getName().replace(".java", "")
+//                + " < " + inputFile + " > " + resultFile;
+//
+//        String command = os_command + "\"" + sub_command + "\"";
+//
+//        // Run command
+//        System.out.println("Running command: " + command);
+//        Process t = rt.exec(command);
+//
+//        // Wait for process to finish
+//        t.waitFor();
+
+        // Create ProcessBuilder object
+        ProcessBuilder pb = new ProcessBuilder();
+
+        // cd to directory
+        pb.directory(getAssignmentDir());
 
         // Run command
-        Process t = Runtime.getRuntime().exec(command);
+        String sub_command = "java " + getAssignmentFile().getName().replace(".java", "")
+                + " < " + inputFile + " > " + resultFile;
+
+        System.out.println("Running command: " + sub_command);
+        Process p = pb.command(base_command, string_command, sub_command).start();
 
         // Wait for process to finish
-        t.waitFor();
+        p.waitFor();
+        System.out.println("Test finished with code: " + p.exitValue());
 
         // Compare files
-        passed = compareFiles(new File (getAssignmentDir().getAbsolutePath() + "\\" + resultFile),
-                              new File(getAssignmentDir().getAbsolutePath() + "\\" + outputFile));
+        passed = compareFiles(new File (getAssignmentDir().getAbsolutePath() + "/" + resultFile),
+                              new File(getAssignmentDir().getAbsolutePath() + "/" + outputFile));
 
         return passed;
     }
@@ -276,11 +307,19 @@ public class Tester {
             }
         }
 
-        // Close Scanners
-        // expected_scanner.close();
-        // actual_scanner.close();
+        if (expected_scanner.hasNextLine() || actual_scanner.hasNextLine()){
+            // Close Scanners
+            expected_scanner.close();
+            actual_scanner.close();
 
-        return !(expected_scanner.hasNextLine() && actual_scanner.hasNextLine());
+            return false;
+        }
+
+        // Close Scanners
+        expected_scanner.close();
+        actual_scanner.close();
+
+        return true;
     }
 
     
@@ -304,8 +343,8 @@ public class Tester {
      * @param test test to debug
      */
     private void debugTest(int test) throws IOException {
-        File outputFile = new File(getAssignmentDir().getAbsolutePath() + "\\" + "output" + test + ".txt");
-        File resultFile = new File(getAssignmentDir().getAbsolutePath() + "\\" + "result" + test + ".txt");
+        File outputFile = new File(getAssignmentDir().getAbsolutePath() + "/" + "output" + test + ".txt");
+        File resultFile = new File(getAssignmentDir().getAbsolutePath() + "/" + "result" + test + ".txt");
 
         // Create Scanners
         Scanner expected_scanner = new Scanner(outputFile);
