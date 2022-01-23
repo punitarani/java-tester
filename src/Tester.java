@@ -246,22 +246,6 @@ public class Tester {
         String outputFile = "output" + test + ".txt";
         String resultFile = "result" + test + ".txt";
 
-//        // Create Runtime object
-//        Runtime rt = Runtime.getRuntime();
-//
-//        // Create command string to run
-//        String sub_command = "java " + getAssignmentFile().getName().replace(".java", "")
-//                + " < " + inputFile + " > " + resultFile;
-//
-//        String command = os_command + "\"" + sub_command + "\"";
-//
-//        // Run command
-//        System.out.println("Running command: " + command);
-//        Process t = rt.exec(command);
-//
-//        // Wait for process to finish
-//        t.waitFor();
-
         // Create ProcessBuilder object
         ProcessBuilder pb = new ProcessBuilder();
 
@@ -272,12 +256,12 @@ public class Tester {
         String sub_command = "java " + getAssignmentFile().getName().replace(".java", "")
                 + " < " + inputFile + " > " + resultFile;
 
-        System.out.println("Running command: " + sub_command);
+        // System.out.println("Running command: " + sub_command);
         Process p = pb.command(base_command, string_command, sub_command).start();
 
         // Wait for process to finish
         p.waitFor();
-        System.out.println("Test finished with code: " + p.exitValue());
+        // System.out.println("Test finished with code: " + p.exitValue());
 
         // Compare files
         passed = compareFiles(new File (getAssignmentDir().getAbsolutePath() + "/" + resultFile),

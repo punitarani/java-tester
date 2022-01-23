@@ -217,8 +217,8 @@ public class Assignment {
             }
         }
 
-        System.out.println("base: " + base_command);
-        System.out.println("string: " + string_command);
+        // System.out.println("base: " + base_command);
+        // System.out.println("string: " + string_command);
     }
 
 
@@ -570,12 +570,12 @@ public class Assignment {
         String sub_command = "javac \"" + getAssignmentFile().getName() + "\"";
 
         // Add command to process builder
-        System.out.println("Compile command: " + sub_command);
+        // System.out.println("Compile command: " + sub_command);
         Process p = pb.command(base_command, string_command, sub_command).start();
 
         // Wait for process to finish
         p.waitFor();
-        System.out.println("Compile finished with code: " + p.exitValue());
+        // System.out.println("Compile finished with code: " + p.exitValue());
     }
 
 
@@ -589,7 +589,7 @@ public class Assignment {
         System.out.println("\nTESTING ASSIGNMENT " + getAssignmentNumber() + "\n");
 
         // Compile
-        System.out.println("Compiling " + this.getAssignmentFile().getName());
+        // System.out.println("Compiling " + this.getAssignmentFile().getName());
         this.compile();
 
         // Get Tester
