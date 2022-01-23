@@ -16,6 +16,8 @@ public class Tester {
     private ArrayList<Integer> results;
     private ArrayList<Integer> failedTests;
 
+    private String os_command;
+
     
     /**
      * Constructor
@@ -27,11 +29,13 @@ public class Tester {
     public Tester(File[] inputs,
                   File[] outputs,
                   File[] results,
-                  int[] tests){
+                  int[] tests,
+                  String os_command){
         setInputFiles(inputs);
         setOutputFiles(outputs);
         setResultFiles(results);
         setTests(tests);
+        setOSCommand(os_command);
     }
 
 
@@ -101,6 +105,14 @@ public class Tester {
         return this.failedTests;
     }
 
+    /**
+     * Get the os_command based on OS
+     * @return OS base command based on OS
+     */
+    public String getOSCommand(){
+        return this.os_command;
+    }
+
 
     /**
      * Set the input files
@@ -167,6 +179,13 @@ public class Tester {
         this.failedTests = failedTests;
     }
 
+    /**
+     * Set OSCommand based on OS
+     */
+    public void setOSCommand(String os_command){
+        this.os_command = os_command;
+    }
+
 
     /**
      * Run the tests
@@ -218,7 +237,8 @@ public class Tester {
         String resultFile = "result" + test + ".txt";
 
         // Create command string to run
-        String command = "cmd /c cd \"" + this.getAssignmentDir().getAbsolutePath() + "\"";
+        String command = os_command;
+        command += "cd \"" + this.getAssignmentDir().getAbsolutePath() + "\"";
         command += " && java " + getAssignmentFile().getName().replace(".java", "")
                 + " < " + inputFile + " > " + resultFile;
 

@@ -22,6 +22,14 @@ public class Assignment {
     private ArrayList<Integer> failedTests;
     private boolean passedTests;
 
+    private String OS;
+
+    final String win_base_command = "cmd /c ";
+    final String mac_base_command = "bash -c ";
+    final String nix_base_command = "bash -c ";
+
+    String base_command = win_base_command;
+
 
     /**
      * Constructor for Assignment
@@ -43,6 +51,8 @@ public class Assignment {
 
         setResultFiles(getResultFiles());
         setTests(getTests());
+
+        setBaseCommand();
 
         setTester(createTester());
     }
@@ -153,6 +163,38 @@ public class Assignment {
      */
     public void setFailedTests(ArrayList<Integer> failedTests){
         this.failedTests = failedTests;
+    }
+
+
+    /**
+     * Set OS of system
+     * @param OS OS of system
+     */
+    public void setOS(String OS){
+        this.OS = OS;
+    }
+
+
+    /**
+     * Set base command for system
+     * @param base_command base command for system
+     */
+    public void setBaseCommand(String base_command){
+        this.base_command = base_command;
+    }
+
+    /**
+     * Set base command for system based on OS
+     * Overloaded method
+     */
+    public void setBaseCommand(){
+        String os = getOS();
+
+        switch (os) {
+            case "mac" -> setBaseCommand(mac_base_command);
+            case "nix" -> setBaseCommand(nix_base_command);
+            default -> setBaseCommand(win_base_command);
+        }
     }
 
 
@@ -326,6 +368,58 @@ public class Assignment {
         return files;
     }
 
+
+    /**
+     * Get the OS of the machine
+     * @return OS of the machine: "win" or "mac" or "nix"
+     */
+    public String getOS(){
+        String os;
+
+        if (OS == null) {
+            // Get OS
+            os = System.getProperty("os.name").toLowerCase();
+
+            // Parse OS
+            if (os.contains("win")){
+                os = "win";
+                setOS(os);
+            }
+
+            else if (os.contains("mac")){
+                os = "mac";
+                setOS(os);
+            }
+
+            else if (os.contains("nix") || os.contains("nux") || os.contains("aix")){
+                os = "nix";
+                setOS(os);
+            }
+
+            // Default to win
+            else {
+                os = "win";
+                setOS(os);
+            }
+        }
+
+        else
+        {
+            os = this.OS;
+        }
+
+        return os;
+    }
+
+    /**
+     * Get the base command based on OS
+     * @return base command based on OS
+     */
+    public String getBaseCommand(){
+        return this.base_command;
+    }
+
+
     /**
      * Parse Assignment Number
      */
@@ -430,7 +524,8 @@ public class Assignment {
                 inputFiles,
                 outputFiles,
                 resultFiles,
-                tests
+                tests,
+                base_command
         );
     }
 
@@ -444,7 +539,9 @@ public class Assignment {
         Runtime rt = Runtime.getRuntime();
 
         // Run command
-        String command = "cmd /c cd \"" + this.assignment_dir.getPath() + "\" && javac \"" + this.getAssignmentFile().getAbsolutePath() + "\"";
+        String command = base_command;
+        command += "cd \"" + getAssignmentDir().getPath();
+        command += " \"&& javac \"" + getAssignmentFile().getAbsolutePath() + "\"";
         Process p = rt.exec(command);
 
         // Wait for process to finish
