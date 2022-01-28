@@ -394,6 +394,28 @@ public class Assignment {
 
 
     /**
+     * Get .Class files in Assignment directory
+     * @return .Class files in Assignment directory
+     */
+    public File[] getClassFiles(){
+        File[] files = getFiles();
+
+        ArrayList<File> class_files = new ArrayList<>();
+        for (File file: files) {
+            if (file.getName().endsWith(".class")) {
+                class_files.add(file);
+            }
+        }
+
+        // Convert to array
+        File[] class_files_arr = new File[class_files.size()];
+        class_files.toArray(class_files_arr);
+
+        return class_files_arr;
+    }
+
+
+    /**
      * Get the OS of the machine
      * @return OS of the machine: "win" or "mac" or "nix"
      */
@@ -566,6 +588,9 @@ public class Assignment {
         // cd to assignment directory
         pb.directory(getAssignmentDir());
 
+        // Delete old .Class files
+        deleteClassFiles();
+
         // Build compile command
         String sub_command = "javac \"" + getAssignmentFile().getName() + "\"";
 
@@ -575,7 +600,24 @@ public class Assignment {
 
         // Wait for process to finish
         p.waitFor();
+        System.out.println("Compile finished");
         // System.out.println("Compile finished with code: " + p.exitValue());
+    }
+
+
+    /**
+     * Delete old .Class files
+     */
+    private void deleteClassFiles(){
+        File[] classFiles = getClassFiles();
+
+        for (File file : classFiles) {
+            boolean delete_success = file.delete();
+
+            if (!delete_success) {
+                System.out.println("Failed to delete file: " + file.getName());
+            }
+        }
     }
 
 
